@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import styled from "styled-components";
+import {
+  MeetingProvider,
+  UserActivityProvider,
+  lightTheme,
+} from "amazon-chime-sdk-component-library-react";
+
+import AttendeeView from "./views/AttendeeMeeting";
+import { ThemeProvider as SystemProvider } from "styled-components";
+import Store from "./store";
+
+const StyledLayout = styled.main`
+  display: block;
+  min-height: 100vh;
+  width: 100%;
+  @media (min-width: 600px) and (min-height: 600px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & > div {
+    display: flex;
+    flex: 1;
+    flexdirection: column;
+    width: 100%;
+  }
+`;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SystemProvider theme={lightTheme}>
+      <StyledLayout>
+        <MeetingProvider>
+          <UserActivityProvider>
+            <Store>
+              <Router>
+                <Switch>
+                  <Route path="/">
+                    <AttendeeView />
+                  </Route>
+                </Switch>
+              </Router>
+            </Store>
+          </UserActivityProvider>
+        </MeetingProvider>
+      </StyledLayout>
+    </SystemProvider>
   );
 }
 

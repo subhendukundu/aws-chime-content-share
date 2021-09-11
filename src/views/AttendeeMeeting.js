@@ -39,6 +39,12 @@ function AttendeeMeeting() {
       };
       await meetingManager.join(joinData);
       await meetingManager.start();
+      meetingManager?.audioVideo?.chooseVideoInputQuality(
+        1280,
+        720,
+        25,
+        2000,
+      );
       dispatch({ type: "SET_MEETING_INFO", payload: meetingResponse });
     } catch (error) {
       console.log("Meeting joining error", error);

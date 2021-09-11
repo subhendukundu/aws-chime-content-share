@@ -35,7 +35,8 @@ function AttendeeView({ name, attendeeId }) {
   console.log("[meetingStatus]", meetingStatus);
   const audioVideo = useAudioVideo();
   const meetingManager = useMeetingManager();
-  const videoUplinkPolicy = meetingManager.meetingSession?.configuration?.videoUplinkBandwidthPolicy;
+  const videoUplinkPolicy =
+    meetingManager.meetingSession?.configuration?.videoUplinkBandwidthPolicy;
   const { attendeeIdToTileId } = useRemoteVideoTileState();
   console.log("[attendeeIdToTileId]", attendeeIdToTileId);
 
@@ -69,7 +70,29 @@ function AttendeeView({ name, attendeeId }) {
     return () => {
       audioVideo?.realtimeUnsubscribeFromReceiveDataMessage("feature");
     };
-  }, [audioVideo, name, videoUplinkPolicy, attendeeIdToTileId]);
+  }, [audioVideo, name, videoUplinkPolicy, attendeeIdToTileId, attendeeId]);
+
+  useEffect(() => {
+    if (!audioVideo) {
+      return;
+    }
+
+    const observer = {
+      videoTileDidUpdate: (tileState) => {
+        console.log("[videoTileDidUpdate]");
+        if (
+          tileState?.boundAttendeeId &&
+          tileState?.tileId &&
+          !tileState.isContent &&
+          !tileState.localTile
+        ) {
+          // audioVideo.pauseVideoTile(tileState?.tileId);
+        }
+      },
+    };
+    audioVideo.addObserver(observer);
+    return () => audioVideo.removeObserver(observer);
+  }, [audioVideo]);
 
   return (
     <StyledWrapper>
@@ -81,7 +104,7 @@ function AttendeeView({ name, attendeeId }) {
           <SettingInputControl />
         </CameraContent>
       </StyledContent>
-      {featureTileId && <RemoteVideo tileId={featureTileId} />}
+      {!!featureTileId && <RemoteVideo tileId={featureTileId} />}
     </StyledWrapper>
   );
 }

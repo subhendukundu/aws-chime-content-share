@@ -15,7 +15,7 @@ const VideoInputControl = ({ label = "Video" }) => {
     if (meetingStatus === MeetingStatus.Succeeded && !isVideoEnabled) {
       toggleVideo();
     }
-  }, [isVideoEnabled, meetingStatus, toggleVideo]);
+  }, [meetingStatus]);
 
   return (
     <ControlBarButton

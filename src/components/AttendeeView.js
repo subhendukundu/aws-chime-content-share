@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ContentShare,
   LocalVideo,
   useMeetingStatus,
   useAudioVideo,
@@ -12,7 +11,6 @@ import styled from "styled-components";
 import AudioInputControl from "./AudioInputControl";
 import VideoInputControl from "./VideoInputControl";
 import SettingInputControl from "./SettingInputControl";
-import PromoteControl from "./PromoteControl";
 
 const StyledContent = styled.div`
   position: absolute;
@@ -44,18 +42,19 @@ function AttendeeView({ name, attendeeId }) {
     function dataMessageHandler(dataMessage) {
       if (dataMessage.topic === "feature") {
         const featureAttendeeId = dataMessage.text();
-        const tileId = attendeeIdToTileId[featureAttendeeId];
         console.log(
           "dataMessagedataMessage",
           featureAttendeeId,
           attendeeIdToTileId
         );
-        console.log("[tileId]", tileId);
+        const tileId = attendeeIdToTileId[featureAttendeeId];
         setFeatureTileId(tileId);
         if (attendeeId === featureAttendeeId) {
           videoUplinkPolicy.setHasBandwidthPriority(true);
           videoUplinkPolicy.updateTransceiverController();
         } else {
+          videoUplinkPolicy.setHasBandwidthPriority(false);
+          videoUplinkPolicy.updateTransceiverController();
           audioVideo.unpauseVideoTile(tileId);
         }
       }

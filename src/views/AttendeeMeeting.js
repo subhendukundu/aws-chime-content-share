@@ -10,8 +10,15 @@ import {
   useMeetingManager,
   useMeetingStatus,
   MeetingStatus,
+  Navbar,
+  NavbarHeader,
+  NavbarItem,
+  LeaveMeeting,
+  Attendees,
+  SignalStrength,
 } from "amazon-chime-sdk-component-library-react";
 import CuratorView from "./CuratorView";
+import LocalMediaStreamMetrics from "../components/LocalMediaStreamMetrics";
 
 function AttendeeMeeting() {
   const meetingManager = useMeetingManager();
@@ -74,10 +81,38 @@ function AttendeeMeeting() {
     return <CuratorView />;
   }
 
-  return name?.length <= 0 ? (
-    <Join onSubmit={onSubmit} />
-  ) : (
-    <AttendeeView name={name} attendeeId={AttendeeId} />
+  return (
+    <>
+      <Navbar flexDirection="column" container height="10%">
+        <NavbarHeader onClose={() => {}} />
+        <Flex>
+          <NavbarItem
+            icon={<SignalStrength />}
+            onClick={() => {}}
+            label="Media metrics"
+          >
+            <LocalMediaStreamMetrics />
+          </NavbarItem>
+          <NavbarItem
+            icon={<Attendees />}
+            onClick={() => {}}
+            label="Attendees"
+          />
+        </Flex>
+        <Flex marginTop="auto">
+          <NavbarItem
+            icon={<LeaveMeeting />}
+            onClick={() => {}}
+            label="Leave Meeting"
+          />
+        </Flex>
+      </Navbar>
+      {name?.length <= 0 ? (
+        <Join onSubmit={onSubmit} />
+      ) : (
+        <AttendeeView name={name} attendeeId={AttendeeId} />
+      )}
+    </>
   );
 }
 

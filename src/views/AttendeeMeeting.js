@@ -9,12 +9,14 @@ import {
   DeviceLabels,
   useMeetingManager,
 } from "amazon-chime-sdk-component-library-react";
+import CuratorView from "./CuratorView";
 
 function AttendeeMeeting() {
   const meetingManager = useMeetingManager();
   const [state, dispatch] = useContext(Context);
-  const { name = "", loading } = state;
-  console.log("name", name);
+  const { name = "", loading, meetingResponse = {} } = state;
+  const { AttendeeId } = meetingResponse?.AttendeeInfo?.Attendee || {};
+  console.log("name", name, AttendeeId);
 
   async function onSubmit(currentName) {
     dispatch({ type: "SET_NAME", payload: currentName });
@@ -46,7 +48,7 @@ function AttendeeMeeting() {
 
   useEffect(() => {
     return () => {
-      meetingManager.leave();
+      meetingManager?.leave();
     };
   }, [meetingManager]);
 
@@ -58,7 +60,15 @@ function AttendeeMeeting() {
     );
   }
 
-  return name?.length <= 0 ? <Join onSubmit={onSubmit} /> : <AttendeeView />;
+  if(name === '4ed819bd-c098-41ca-863b-1f445e5e27f9') {
+    return <CuratorView />
+  }
+
+  return name?.length <= 0 ? (
+    <Join onSubmit={onSubmit} />
+  ) : (
+    <AttendeeView name={name} attendeeId={AttendeeId} />
+  );
 }
 
 export default AttendeeMeeting;

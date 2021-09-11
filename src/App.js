@@ -27,6 +27,7 @@ const StyledLayout = styled.main`
     flex: 1;
     flexdirection: column;
     width: 100%;
+    height: 100vh;
   }
 `;
 

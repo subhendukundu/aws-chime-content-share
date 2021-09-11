@@ -8,11 +8,14 @@ import {
   Flex,
   DeviceLabels,
   useMeetingManager,
+  useMeetingStatus,
+  MeetingStatus,
 } from "amazon-chime-sdk-component-library-react";
 import CuratorView from "./CuratorView";
 
 function AttendeeMeeting() {
   const meetingManager = useMeetingManager();
+  const meetingStatus = useMeetingStatus();
   const [state, dispatch] = useContext(Context);
   const { name = "", loading, meetingResponse = {} } = state;
   const { AttendeeId } = meetingResponse?.AttendeeInfo?.Attendee || {};
@@ -39,18 +42,19 @@ function AttendeeMeeting() {
       };
       await meetingManager.join(joinData);
       await meetingManager.start();
-      meetingManager?.audioVideo?.chooseVideoInputQuality(
-        1280,
-        720,
-        25,
-        2000,
-      );
+      meetingManager?.audioVideo?.chooseVideoInputQuality(1280, 720, 25, 2000);
       dispatch({ type: "SET_MEETING_INFO", payload: meetingResponse });
     } catch (error) {
       console.log("Meeting joining error", error);
       dispatch({ type: "SET_ERROR", payload: "There was an error!" });
     }
   }
+
+  useEffect(() => {
+    if (meetingStatus === MeetingStatus.Succeeded) {
+      meetingManager?.audioVideo?.realtimeMuteLocalAudio();
+    }
+  }, [meetingStatus]);
 
   useEffect(() => {
     return () => {
@@ -66,8 +70,8 @@ function AttendeeMeeting() {
     );
   }
 
-  if(name === '4ed819bd-c098-41ca-863b-1f445e5e27f9') {
-    return <CuratorView />
+  if (name === "4ed819bd-c098-41ca-863b-1f445e5e27f9") {
+    return <CuratorView />;
   }
 
   return name?.length <= 0 ? (

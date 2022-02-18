@@ -49,14 +49,14 @@ function AttendeeView({ name, attendeeId }) {
         );
         const tileId = attendeeIdToTileId[featureAttendeeId];
         setFeatureTileId(tileId);
-        if (attendeeId === featureAttendeeId) {
+        /* if (attendeeId === featureAttendeeId) {
           videoUplinkPolicy.setHasBandwidthPriority(true);
           videoUplinkPolicy.updateTransceiverController();
         } else {
           videoUplinkPolicy.setHasBandwidthPriority(false);
           videoUplinkPolicy.updateTransceiverController();
           audioVideo.unpauseVideoTile(tileId);
-        }
+        } */
       }
     }
 

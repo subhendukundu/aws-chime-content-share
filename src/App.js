@@ -4,12 +4,28 @@ import styled from "styled-components";
 import {
   MeetingProvider,
   UserActivityProvider,
-  lightTheme,
+  lightTheme, MeetingManager,
 } from "amazon-chime-sdk-component-library-react";
 
 import AttendeeView from "./views/AttendeeMeeting";
 import { ThemeProvider as SystemProvider } from "styled-components";
 import Store from "./store";
+import {DefaultActiveSpeakerPolicy, LogLevel} from "amazon-chime-sdk-js";
+
+class VideoQualityActiveSpeakerPolicy extends DefaultActiveSpeakerPolicy {
+  prioritizeVideoSendBandwidthForActiveSpeaker() {
+    return false;
+  }
+}
+
+const enableWebAudio = true;
+const activeSpeakerPolicy = new VideoQualityActiveSpeakerPolicy();
+const meetingConfig = {
+  enableWebAudio,
+  activeSpeakerPolicy
+};
+
+const meetingManager = new MeetingManager({ logLevel: LogLevel.DEBUG });
 
 const StyledLayout = styled.main`
   display: block;
@@ -35,7 +51,7 @@ function App() {
   return (
     <SystemProvider theme={lightTheme}>
       <StyledLayout>
-        <MeetingProvider>
+        <MeetingProvider {...meetingConfig} meetingManager={meetingManager}>
           <UserActivityProvider>
             <Store>
               <Router>

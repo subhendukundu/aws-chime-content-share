@@ -33,7 +33,7 @@ function AttendeeMeeting() {
     const data = {
       input: {
         object: {
-          room_id: "050f9e20-db2f-407d-8b99-fe59f05519c3",
+          room_id: "d2d6af3c-c542-46eb-a264-3d33ee9a6712",
           user_id: currentName,
         },
       },
@@ -77,7 +77,7 @@ function AttendeeMeeting() {
     );
   }
 
-  if (name === "4ed819bd-c098-41ca-863b-1f445e5e27f9") {
+  if (name === "437b52d4-c9db-4bf4-b8bf-63dc785a312b") {
     return <CuratorView />;
   }
 

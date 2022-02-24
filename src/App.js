@@ -51,7 +51,7 @@ function App() {
   return (
     <SystemProvider theme={lightTheme}>
       <StyledLayout>
-        <MeetingProvider {...meetingConfig} meetingManager={meetingManager}>
+        <MeetingProvider {...meetingConfig}>
           <UserActivityProvider>
             <Store>
               <Router>
